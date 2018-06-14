@@ -1,0 +1,244 @@
+
+@media screen and (max-width: 992px) {
+    .bar-mode {
+        visibility: visible !important;
+    }
+    .step-mode {
+        display: none;
+    }
+}
+
+.bar-mode {
+    visibility: hidden;
+}
+
+#indicator h3{
+    color:gray;
+}
+
+ul{
+    list-style: none;
+}
+
+ul.SteppedProgress{
+    counter-reset:step;
+    display:flex;
+    margin:auto;
+    overflow:hidden;
+    padding:0;
+    position:relative;
+    text-align:center;
+    z-index:1;
+}
+
+.SteppedProgress li{
+    list-style-type:none;
+    color:#404140;
+    line-height:normal;
+    text-transform:uppercase;
+    flex:1;
+    font-size:14px;
+    position:relative;
+    padding:0 2%;
+    margin:0 auto 12%;
+}
+
+.SteppedProgress span{
+    color:gray;
+}
+
+.SteppedProgress li:before{
+    content:counter(step);
+    counter-increment:step;
+    width:30px;
+    line-height:30px;
+    display:block;
+    font-size:18px;
+    color:#FFF;
+    background:gray;
+    border-radius:15px;
+    margin:0 auto 10px;
+    position:relative;
+    z-index:1;
+}
+
+.SteppedProgress li:after{
+    content:'';
+    width:100%;
+    height:6px;
+    background:silver;
+    position:absolute;
+    left:-50%;
+    top:15px;
+    z-index:-1;
+}
+
+.SteppedProgress li:first-child:after{
+    content:none
+}
+
+.SteppedProgress li.complete:before{
+    background:#00e640;
+    color:white
+}
+
+.SteppedProgress li.complete:after{
+    background:rgba(35,250,0,0.6);
+}
+
+ul.SteppedProgress.Vertical{
+    display:block
+}
+
+.SteppedProgress.Vertical li{
+    flex:none;
+    clear:both;
+    text-align:left;
+    padding:0;
+    margin-left:0;
+    min-height:2.2em
+}
+
+.SteppedProgress.Vertical li span{
+    white-space:nowrap
+}
+
+ul.SteppedProgress.Vertical li:before{
+    float:none;
+    display:inline-block;
+    margin-right:10px;
+    text-align:center;
+    margin-left:0
+}
+
+.SteppedProgress.Vertical li:after{
+    content:'';
+    width:6px;
+    height:100%;
+    position:absolute;
+    left:12px;
+    top:-100%;
+    z-index:-1
+}
+
+ul.SteppedProgress.Vertical li.boxed,ul.SteppedProgress.Vertical li.current{
+    min-width:90%
+}
+
+ul.SteppedProgress.Vertical li.boxed span,ul.SteppedProgress.Vertical li.current span{
+    display:inline;
+    margin-left:0
+}
+
+ul.SteppedProgress.Vertical li.boxed span:after,ul.SteppedProgress.Vertical li.current span:after{
+    bottom:auto;
+    left:auto;
+    right:100%;
+    top:7px;
+    border-color:rgba(255,255,255,0);
+    border-right-color:silver;
+    margin:0
+}
+
+ul.SteppedProgress.Vertical li.current span:after{
+    border-right-color:#4170b0
+}
+
+@media (max-width: 480px){
+    ul.SteppedProgress{
+        display:block;
+    }
+
+    .SteppedProgress li{
+        flex:none;
+        clear:both;
+        text-align:left;
+        padding:0;
+        margin-left:0;
+        min-height:2.2em;
+    }
+
+    .SteppedProgress li span{
+        white-space:nowrap
+    }
+
+    ul.SteppedProgress li:before{
+        float:none;
+        display:inline-block;
+        margin-right:10px;
+        text-align:center;
+        margin-left:0
+    }
+
+    .SteppedProgress li:after{
+        content:'';
+        width:6px;
+        height:100%;
+        position:absolute;
+        left:12px;
+        top:-50%;
+        z-index:-1
+    }
+
+    ul.SteppedProgress li.current span:after{
+        border-right-color:#4170b0
+    }
+
+    ul.SteppedProgress li.complete.boxed span:after{
+        border-right-color:#23b900
+    }
+}
+
+#submission{
+    margin:15px 0;
+}
+
+#top{
+    display:flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+#submission ul li p{
+    margin:0 auto;
+    padding:0 auto;
+}
+
+#submission ul li textarea{
+    margin-bottom: 20px;
+}
+
+#submission ul li:first-child input{
+    border:none;
+    border-bottom:2px solid #434343;
+    width:30%;
+    margin-bottom: 20px;
+}
+
+#submission #subtitle{
+    width:91%;
+    color:gray;
+}
+
+.btn-submission{
+    background:#0b93d5;
+    color:#FFF;
+    border:none;
+    padding:5px 15px;
+    margin-right:10px;
+}
+
+.btn-submission:hover{
+    background:#FFF;
+    color:#0b93d5;
+    border:1px solid #0b93d5;
+}
+
+#submission ul li:last-child p{
+    margin-top: 15px;
+}
+
+#preview{
+    display:none;
+}
