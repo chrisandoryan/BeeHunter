@@ -1,4 +1,4 @@
-@extends(\Illuminate\Support\Facades\Auth::check() ? 'layouts.client.panel' : 'layouts.public.panel')
+@extends('layouts.public.panel')
 
 @section('content')
     <!-- Content Header (Page header) -->
@@ -6,10 +6,6 @@
         <h1>
             Bounty Programs
         </h1>
-        <ol class="breadcrumb">
-            <li><a href="{{ route('dashboard') }}"><i class="fa fa-dashboard"></i>Dashboard</a></li>
-            <li><a href="{{ route('explore_everything') }}">Bounty Programs</a></li>
-        </ol>
     </section>
 
     <!-- Main content -->
@@ -32,7 +28,7 @@
                                 </div>
                                 <div class="col-sm-5" >
                                     <div class="row">
-                                        <a href="{{ url("/explore/programs/{$bounty_detail->category_id}/{$bounty_detail->bounty_id}") }}"><h3>{{ $bounty_detail->title }}</h3></a>
+                                        <a href="{{ url("/explore/programs/{$bounty_detail->hash}") }}"><h3>{{ $bounty_detail->title }}</h3></a>
                                     </div>
                                     {{--<div class="row">--}}
                                         {{--<span class="label label-primary">{{ $bounty_detail->bountyCategories->name }}</span>--}}
@@ -42,18 +38,18 @@
                                         <span class="label label-primary">{{ $bounty_detail->bountyCategories->name }}</span>
                                         <span class="label label-success">{{ $bounty_detail->is_running == \Illuminate\Support\Facades\Config::get('constants.status.program.open') ? 'Open' : 'Closed' }}</span>
                                         <div class="rewards-information">
-                                            @if($bounty_detail->is_paid_reward == \Illuminate\Support\Facades\Config::get('constants.rewards.payment'))
-                                                <span class="label label-info">up to {{ number_format($bounty_detail->maximum_rewards, 0, '', ',') }} IDR</span>
-                                            @elseif($bounty_detail->is_paid_reward == \Illuminate\Support\Facades\Config::get('constants.rewards.unpaid'))
-                                                <span class="label label-info">{{ $bounty_detail->rewards_tagline }}</span>
+                                            @if($bounty_detail->rewardTypes->reward_id == \Illuminate\Support\Facades\Config::get('constants.rewards.payment'))
+                                                <span class="label label-info">up to {{ number_format($bounty_detail->maximum_reward, 0, '', ',') }} IDR</span>
+                                            @else
+                                                <span class="label label-info">{{ $bounty_detail->reward_string }}</span>
                                             @endif
                                         </div>
                                     </div>
                                 </div>
                                 <div class="col-sm-4">
                                     <div class="row" style="padding-top:20px;">
-                                        <button type="button" class="btn btn-default"><a href="{{ url("/explore/programs/{$bounty_detail->category_id}/{$bounty_detail->bounty_id}") }}">See Detail</a></button>&#09;
-                                        <button type="button" class="btn btn-default"><a href="{{ url("submission/{$bounty_detail->category_id}/{$bounty_detail->bounty_id}") }}">Submit Report</a></button>
+                                        <button type="button" class="btn btn-default"><a href="{{ url("/explore/programs/{$bounty_detail->hash}") }}">See Detail</a></button>&#09;
+                                        <!-- <button type="button" class="btn btn-default"><a href="{{ url("submission/{$bounty_detail->hash}") }}">Submit Report</a></button> -->
                                     </div>
                                     {{--<div class="row" style="padding-top:10px;">--}}
                                         {{--Attempt: <small class="label bg-blue">50</small>--}}

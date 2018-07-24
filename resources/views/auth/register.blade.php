@@ -1,34 +1,15 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <link rel="stylesheet" href="{{ URL::asset('panel/bower_components/bootstrap/dist/css/bootstrap.min.css') }}">
-    <!-- Font Awesome -->
-    <link rel="stylesheet" href="{{ URL::asset('panel/bower_components/font-awesome/css/font-awesome.min.css') }}">
-    <link rel="stylesheet" href="{{ URL::asset('panel/bower_components/Ionicons/css/ionicons.min.css') }}">
-    <!-- Theme style -->
-    <link rel="stylesheet" href="{{ URL::asset('panel/dist/css/AdminLTE.min.css') }}">
-    <!-- Input Mask -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery.inputmask/3.3.4/css/inputmask.min.css">
-    <!-- Content Delivery Network -->
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.inputmask/3.3.4/inputmask/inputmask.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.inputmask/3.3.4/inputmask/jquery.inputmask.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.inputmask/3.3.4/inputmask/inputmask.date.extensions.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.inputmask/3.3.4/inputmask/inputmask.extensions.min.js"></script>
-    <title>Secure Everything Made of Binaries, Collectively :)</title>
-</head>
-<body class="hold-transition register-page">
-    <div class="box box-primary register-box">
+     <div class="box box-primary register-box">
+        <div class="login-box-header box-header">
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">×</span></button>
+        </div>
         <div class="register-box-body box-body">
             <table>
-                <form method="POST">
+                <form method="POST" action="{{ route('register') }}">
                 {{ csrf_field() }}
                 <tr>
                     <div class="logo-auth">
-                        <b>BEE</b>HUNTER
+                        <img src="{{asset("images/general/beehunter-2.svg")}}" alt="">
                     </div>
                 </tr>
                 <tr>
@@ -105,12 +86,5 @@
                     @endif
             </form>
         </table>
-    </div>
-</div>
-</body>
-<script>
-    $(document).ready(function() {
-        $('.datemask').inputmask('dd/mm/yyyy', { 'placeholder': 'dd/mm/yyyy' });
-    })
-</script>
-</html>
+        </div>
+     </div>

@@ -19,23 +19,24 @@ class CreateHeaderBountiesTable extends Migration
             $table->integer('client_id')->unsigned();
             $table->string('category_id', 10);
             $table->string('title');
-            $table->string('test_target');
-            $table->string('source_code');
-            $table->text('disclosure_description');
+            // $table->string('source_code');
+            // $table->text('disclosure_description');
             $table->text('scope_description');
-            $table->text('exclusion_description');
-            $table->text('rewards_description');
-            $table->string('rewards_tagline')->default('Exclusive Merchandise'); //used for a company to describe what kind of merchandise they offer.
-            $table->boolean('is_paid_reward')->default(false);
-            $table->integer('minimum_rewards')->default(0);
-            $table->integer('maximum_rewards')->default(0);
-            $table->date('up_since')->useCurrent();
-            $table->dateTime('deadline');
-//            $table->integer('bugs_reported')->default(0);
-            $table->boolean('is_running')->default(true);
+            // $table->text('exclusion_description');
+            // $table->text('rewards_description');
+            // $table->string('rewards_tagline')->default('Exclusive Merchandise'); //used for a company to describe what kind of merchandise they offer.
+            $table->integer('reward_id')->unsigned()->default(2);
+            $table->integer('minimum_reward')->default(0);
+            $table->integer('maximum_reward')->default(0);
+            $table->date('up_since');
+            $table->string('hash');
+            // $table->dateTime('deadline');
+            // $table->integer('bugs_reported')->default(0);
+            $table->boolean('is_running')->default(false);
 
             $table->foreign('client_id')->references('client_id')->on('clients');
             $table->foreign('category_id')->references('category_id')->on('bounty_categories');
+            $table->foreign('reward_id')->references('reward_id')->on('reward_types');
         });
     }
 

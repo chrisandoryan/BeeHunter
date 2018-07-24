@@ -1,4 +1,4 @@
-@extends('layouts.client.panel')
+@extends('layouts.hunter.panel')
 
 @section('content')
 <div style="padding:20px;">

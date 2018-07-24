@@ -1,4 +1,4 @@
-@extends('layouts.client.panel')
+@extends('layouts.hunter.panel')
 
 @section('content')
     <!-- Content Header (Page header) -->
@@ -43,8 +43,8 @@
                         <!-- /.col -->
                         <div class="col-sm-4">
                             <div class="description-block">
-                                <h5 class="description-header">35</h5>
-                                <span class="description-text">BugHunt</span>
+                                <h5 class="description-header">Rp. {{ $user->balance }}</h5>
+                                <span class="description-text">Balance</span>
                             </div>
                             <!-- /.description-block -->
                         </div>
@@ -55,6 +55,74 @@
             </div>
             <!-- /.widget-user -->
         </div>
+        <div class="col-md-7">
+        <div class="box box-info">
+            <div class="box-header with-border">
+              <h3 class="box-title">Recent Hacks</h3>
+              <div class="box-tools pull-right">
+                <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i>
+                </button>
+              </div>
+            </div>
+            <!-- /.box-header -->
+            <div class="box-body">
+              <div class="table-responsive">
+                <table class="table no-margin">
+                  <thead>
+                  <tr>
+                    <th>Hash</th>
+                    <th>Title</th>
+                    <th>Program</th>
+                    <th>Status</th>
+                  </tr>
+                  </thead>
+                  <tbody>
+                    @foreach($records as $record)
+                    <tr>
+                        <td><a href="{{ url("/hunter/submission/{$record->hash}") }}">{{ $record->hash }}</a></td>
+                        <td>{{ $record->title }}</td>
+                        <td>{{ $record->headerbounties->title }}</td>
+                        <td><span class="label label-success">Pending for Review</span></td>
+                    </tr>
+                    @endforeach
+                  </tbody>
+                </table>
+              </div>
+              <!-- /.table-responsive -->
+            </div>
+            <!-- /.box-body -->
+            <div class="box-footer clearfix">
+              <a href="{{ route('hunter.activity') }}" class="btn btn-sm btn-default btn-flat pull-right">View All</a>
+            </div>
+            <!-- /.box-footer -->
+          </div>
+        </div>
+        </div>
+        <div class="row">
+            <div class="col-md-4">
+            <div class="small-box bg-aqua-active">
+                <div class="inner">
+                    <h3>1</h3>
+                    <p>BugHunted</p>
+                </div>
+            </div>
+            </div>
+            <div class="col-md-4">
+            <div class="small-box bg-aqua-active">
+                <div class="inner">
+                    <h3>13</h3>
+                    <p>Report Submission This Month</p>
+                </div>
+            </div>
+            </div>
+            <div class="col-md-4">
+            <div class="small-box bg-aqua-active">
+                <div class="inner">
+                    <h3>0.0</h3>
+                    <p>Performance</p>
+                </div>
+            </div>
+            </div>
         </div>
     </section>
 @endsection

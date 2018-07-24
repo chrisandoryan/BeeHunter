@@ -1,4 +1,4 @@
-@extends('layouts.client.panel')
+@extends('layouts.hunter.panel')
 
 @section('content')
     <section class="content">
@@ -8,13 +8,12 @@
                     <div class="step-mode">
                         <h3>STEPS</h3>
                         <ul class="SteppedProgress Vertical">
-                            <li class="complete"><span>Hunt</span></li>
-                            <li class="complete"><span>Upload</span></li>
-                            <li class="complete current"><span>Fill out form</span></li>
+                            <li class="complete"><span>System Testing</span></li>
+                            <li class="complete"><span>Discover Bugs</span></li>
+                            <li class="complete current"><span>Fill Report</span></li>
                             <li class=""><span>Submit</span></li>
-                            <li class=""><span>Being processed</span></li>
-                            <li class=""><span>Reviewed</span></li>
-                            <li class=""><span>Approved/Decline</span></li>
+                            <li class=""><span>System Patch</span></li>
+                            <li class=""><span>Reward</span></li>
                         </ul>
                     </div>
                     <div class="bar-mode">
@@ -31,23 +30,24 @@
                 </div>
                 {{--</div>--}}
             </div>
-
             <div class="col-md-9">
                 <div class="box box-primary">
                     <div class="box-body">
                         <div id="submission">
                             <div id="top">
                                 <div id="subtitle">
-                                    <h2>SUBMISSION</h2>
+                                    <h2>Bug Report for {{ $program->title }}</h2>
+                                    <!-- <small>Optional description</small> -->
                                     <hr>
                                 </div>
                             </div>
                             <div>
-                                <form action="#" method="post">
+                                <form action="{{ url("reporting/{$program->hash}") }}" method="post" enctype="multipart/form-data">
+                                    {{ csrf_field() }}
                                     <ul>
                                         <li>
                                             <p>Title *</p>
-                                            <input type="text" name="title">
+                                            <input type="text" name="report-title">
                                         </li>
                                         <li>
                                             <p>Issue Description *</p>
@@ -55,12 +55,11 @@
                                         </li>
                                         <li>
                                             <p>Detailed Report *</p>
-                                            <input type="file" id="fileselect" name="fileselect[]" multiple="multiple" />
+                                            <input type="file" id="fileselect" name="file-submission" multiple="multiple" />
                                         </li>
                                         <br>
                                         <li>
                                             <input class="btn-submission" type="submit" value="Submit">
-                                            <input class="btn-submission" type="submit" value="Preview">
                                             <p>Before submitting, please review our <a href="">disclosure guidelines</a> and <a href="">submission terms</a> subjectively</p>
                                         </li>
                                     </ul>

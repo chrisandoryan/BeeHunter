@@ -2716,14 +2716,14 @@ a:focus {
 }
 
 .btn-primary {
-    background-color: #3c8dbc;
-    border-color: #367fa9
+    background-color: #00a9e2;
+    /*border-color: #367fa9*/
 }
 
 .btn-primary:hover,
 .btn-primary:active,
 .btn-primary.hover {
-    background-color: #367fa9
+    background-color: #1189c4
 }
 
 .btn-success {
@@ -3923,10 +3923,15 @@ table.text-center th {
     }
 }
 
+.login-box-header,
+.register-box-header{
+    padding: 5px 15px 0;
+}
+
 .login-box-body,
 .register-box-body {
     background: #fff;
-    padding:20px 45px;
+    padding:0 45px 20px;
     border-top: 0;
     color: #666
 }
@@ -6580,9 +6585,14 @@ table.text-center th {
 }
 
 .logo-auth {
-    text-align: center;
-    font-size: 24px;
-    padding: 20px 0;
+    padding: 0 0 20px;
+}
+
+.logo-auth > img{
+    height: auto;
+    width: auto;
+    max-width: 300px;
+    max-height: 300px;
 }
 
 .full-name-l {

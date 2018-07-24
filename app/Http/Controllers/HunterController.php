@@ -2,15 +2,14 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Controllers\BountyController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Config;
+use App\Submission;
 
 class HunterController extends Controller
 {
-//    /*public function __construct() {
-//        $this->middleware('auth');
-//    }*/
 
     public function profile() {
        
@@ -30,7 +29,8 @@ class HunterController extends Controller
     public function dashboard()
     {
         $user = Auth::user();
-        return view('hunters.dashboard', ['user' => $user]);
+        $records = Submission::where('hunter_id', '=', $user->hunter_id)->take(3)->get();
+        return view('hunters.dashboard', ['user' => $user, 'records' => $records]);
     }
 
 }

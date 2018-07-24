@@ -9,6 +9,7 @@ class HeaderBounty extends Model
 {
     //
     protected $table, $primaryKey;
+    public $timestamps = false;
 
     function __construct(array $attributes = array()) {
         parent::__construct($attributes);
@@ -22,5 +23,9 @@ class HeaderBounty extends Model
 
     public function bountyCategories() {
         return $this->belongsTo(BountyCategory::class, 'category_id');
+    }
+
+    public function rewardTypes() {
+        return $this->belongsTo(RewardType::class, 'reward_id');
     }
 }

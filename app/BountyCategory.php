@@ -17,6 +17,7 @@ class BountyCategory extends Model
     }
 
     public $timestamps = false;
+    public $incrementing = false;
 
     public function headerBounties() {
         return $this->hasMany(HeaderBounty::class, 'category_id');

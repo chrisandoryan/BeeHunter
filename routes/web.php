@@ -11,6 +11,9 @@
 |
 */
 
+// [Public Routes]
+Route::get('/', 'BountyController@fetchAllBounties')->name('public.landpage');
+
 // [Hunter Routes]
  Route::group([
      'prefix' => 'hunter',
@@ -18,11 +21,38 @@
          'auth',
      ]
  ], function() {
-        Route::get('dashboard', 'HunterController@dashboard')->name('dashboard');
-        Route::get('profile', 'HunterController@profile')->name('profile');
-        Route::get('settings', 'HunterController@profile')->name('settings');
-        Route::get('mailbox', 'HunterController@mailbox')->name('leaderboard');
-        Route::get('compose', 'HunterController@compose')->name('compose');
+        Route::get('dashboard', 'HunterController@dashboard')->name('hunter.dashboard');
+        Route::get('profile', 'HunterController@profile')->name('hunter.profile');
+        Route::get('settings', 'HunterController@profile')->name('hunter.settings');
+        Route::get('mailbox', 'HunterController@mailbox')->name('hunter.leaderboard');
+        Route::get('compose', 'HunterController@compose')->name('hunter.compose');
+        Route::get('activity', 'BountyController@getSubmissionRecords')->name('hunter.activity');
+        Route::get('submission/{hash}', function() {
+            return view('hunters.timeline');
+        });
+ });
+
+ // [Client Routes]
+ Route::group([
+    'prefix' => 'client',
+ ], function() {
+        Route::get('dashboard', 'ClientController@dashboard')->name('client.dashboard');
+        Route::get('login', 'Auth\ClientLoginController@showLoginForm')->name('client.login');
+        Route::post('login', 'Auth\ClientLoginController@doActionLogin')->name('client.login.submit');
+        Route::group([
+            'prefix' => 'program/create',
+        ], function() {
+            Route::get('detail', 'BountyController@showProgramCreatorPage')->name('client.create.program');
+            Route::post('detail', 'BountyController@storeBountyProgram')->name('client.store.program');
+            Route::get('reward', 'BountyController@showRewardCreatorPage')->name('client.create.reward');
+            Route::post('reward', 'BountyController@storeProgramReward')->name('client.store.reward');
+        });
+        Route::group([
+            'prefix' => 'reports',
+        ], function() {
+            Route::get('/', 'ClientController@displayReport')->name('client.reports');
+            Route::get('{identifier}', 'ClientController@getReportDetail');
+        });
  });
 
 // [Bounty Explore]
@@ -33,24 +63,27 @@
      Route::get('android', 'BountyController@fetchAndroidBounties')->name('explore_android');
      Route::get('ios', 'BountyController@fetchiOSBounties')->name('explore_ios');
      Route::get('network', 'BountyController@fetchNetworkBounties')->name('explore_network');
-
      // [Bounty Details]
-     Route::get('programs/{cat}/{cid}', 'BountyController@fetchBountyDetail');
+     Route::get('programs/{hash}', 'BountyController@fetchBountyDetail');
  });
 
  // [Submission Handling]
  Route::group([
-     'prefix' => 'submission',
+     'prefix' => 'reporting',
      'middleware' => [
          'auth',
      ]
  ], function() {
-     Route::get('{cat}/{cid}', function() {
-         return view('bounty.submit');
-     })->name('submission');
-//     Route::get('{cat}/{cid}', 'BountyController@fetchBountyDetail');
-     Route::post('{cat}/{cid}', 'BountyController@handleSubmission');
+     Route::get('{hash}', 'BountyController@getReportSubmissionPage');
+     Route::post('{hash}', 'BountyController@handleReportSubmission');
  });
 
  // [Authentication]
  Auth::routes();
+
+ // [Validation]
+ Route::group([
+    'prefix' => 'validate',
+ ], function() {
+   
+ });

@@ -45,6 +45,15 @@ return [
             'driver' => 'token',
             'provider' => 'users',
         ],
+
+        'client' => [
+            'driver' => 'session',
+            'provider' => 'clients',
+        ],
+        'client-api' => [
+            'driver' => 'token',
+            'provider' => 'clientss',
+        ],
     ],
 
     /*
@@ -69,7 +78,10 @@ return [
             'driver' => 'eloquent',
             'model' => \App\Hunter::class,
         ],
-
+        'clients' => [
+            'driver' => 'eloquent',
+            'model' => \App\Client::class,
+        ],
         // 'users' => [
         //     'driver' => 'database',
         //     'table' => 'users',

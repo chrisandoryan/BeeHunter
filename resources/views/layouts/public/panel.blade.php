@@ -14,7 +14,16 @@
   <link href="{{ URL::asset('panel/css/style.css') }}" rel="stylesheet">
   <link href="{{ URL::asset('panel/css/pages/dashboard.css') }}" rel="stylesheet">
   <link href="{{ URL::asset('panel/css/submission.css') }}" rel="stylesheet">
+  <link rel="stylesheet" href="{{ URL::asset('plugins/iCheck/square/blue.css')}}">
 
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery.inputmask/3.3.4/css/inputmask.min.css">
+  <!-- jQuery 3 -->
+  <script src="{{ URL::asset('panel/bower_components/jquery/dist/jquery.min.js')}}"></script>
+  <!-- Content Delivery Network -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.inputmask/3.3.4/inputmask/inputmask.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.inputmask/3.3.4/inputmask/inputmask.extensions.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.inputmask/3.3.4/inputmask/inputmask.date.extensions.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.inputmask/3.3.4/inputmask/jquery.inputmask.min.js"></script>
   <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
   <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
 
@@ -51,8 +60,6 @@
 </div>
 <!-- ./wrapper -->
 
-<!-- jQuery 3 -->
-<script src="{{ URL::asset('panel/bower_components/jquery/dist/jquery.min.js')}}"></script>
 <!-- Bootstrap 3.3.7 -->
 <script src="{{ URL::asset('panel/bower_components/bootstrap/dist/js/bootstrap.min.js')}}"></script>
 <!-- FastClick -->
@@ -60,6 +67,7 @@
 <!-- AdminLTE App -->
 <script src="{{ URL::asset('panel/dist/js/adminlte.min.js')}}"></script>
 <!-- AdminLTE for demo purposes -->
-<script src="{{ URL::asset('panel/dist/js/demo.js')}}"></script>
+{{--<script src="{{ URL::asset('panel/dist/js/demo.js')}}"></script>--}}
 </body>
 </html>
+

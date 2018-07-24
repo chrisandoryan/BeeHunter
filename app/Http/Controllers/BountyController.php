@@ -2,14 +2,19 @@
 
 namespace App\Http\Controllers;
 
+use App\BountyTarget;
 use App\BountyCategory;
+use App\RewardType;
 use App\Client;
 use App\HeaderBounty;
+use App\Submission;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use \Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\DB;
+use Hash;
+use Validator;
 
 class BountyController extends Controller
 {
@@ -22,60 +27,216 @@ class BountyController extends Controller
 
     public function fetchAllBounties() {
         $bounties = HeaderBounty::where('is_running', '=', '1')->get();
-//        dd($grouping);
-//        dd($bounties[0]->clients());
-//        return view('bounty.list')->with('bounties', $bounties);
-        return view('bounty.explore', ['bounties' => $bounties, 'grouping' => $this->category_grouping]);
+        // dd($bounties[0]->rewardTypes->reward_id);
+        if(Auth::check()) {
+            return view('hunters.explore', ['bounties' => $bounties, 'grouping' => $this->category_grouping]);
+        }
+        else if(Auth::guard('client')->check()) {
+            return view('clients.explore', ['bounties' => $bounties, 'grouping' => $this->category_grouping]);
+        }
+        else {
+            return view('bounty.explore', ['bounties' => $bounties, 'grouping' => $this->category_grouping]);
+        }
     }
 
     public function fetchServerBounties() {
         $bounties = HeaderBounty::where('category_id', '=', 'SI')->where('is_running', '=', 1)->get();
-        return view('bounty.explore', ['bounties' => $bounties, 'grouping' => $this->category_grouping]);
+        if(Auth::check()) {
+            return view('hunters.explore', ['bounties' => $bounties, 'grouping' => $this->category_grouping]);
+        }
+        else if(Auth::guard('client')->check()) {
+            return view('clients.explore', ['bounties' => $bounties, 'grouping' => $this->category_grouping]);
+        }
+        else {
+            return view('bounty.explore', ['bounties' => $bounties, 'grouping' => $this->category_grouping]);
+        }
     }
 
     public function fetchWebBounties() {
         $bounties = HeaderBounty::where('category_id', '=', 'WS')->where('is_running', '=', 1)->get();
-        return view('bounty.explore', ['bounties' => $bounties, 'grouping' => $this->category_grouping]);
+        if(Auth::check()) {
+            return view('hunters.explore', ['bounties' => $bounties, 'grouping' => $this->category_grouping]);
+        }
+        else if(Auth::guard('client')->check()) {
+            return view('clients.explore', ['bounties' => $bounties, 'grouping' => $this->category_grouping]);
+        }
+        else {
+            return view('bounty.explore', ['bounties' => $bounties, 'grouping' => $this->category_grouping]);
+        }
     }
 
     public function fetchAndroidBounties() {
         $bounties = HeaderBounty::where('category_id', '=', 'AS')->where('is_running', '=', 1)->get();
-        return view('bounty.explore', ['bounties' => $bounties, 'grouping' => $this->category_grouping]);
+        if(Auth::check()) {
+            return view('hunters.explore', ['bounties' => $bounties, 'grouping' => $this->category_grouping]);
+        }
+        else if(Auth::guard('client')->check()) {
+            return view('clients.explore', ['bounties' => $bounties, 'grouping' => $this->category_grouping]);
+        }
+        else {
+            return view('bounty.explore', ['bounties' => $bounties, 'grouping' => $this->category_grouping]);
+        }
     }
 
     public function fetchiOSBounties() {
         $bounties = HeaderBounty::where('category_id', '=', 'iOS')->where('is_running', '=', 1)->get();
-        return view('bounty.explore', ['bounties' => $bounties, 'grouping' => $this->category_grouping]);
+        if(Auth::check()) {
+            return view('hunter.explore', ['bounties' => $bounties, 'grouping' => $this->category_grouping]);
+        }
+        else if(Auth::guard('client')->check()) {
+            return view('client.explore', ['bounties' => $bounties, 'grouping' => $this->category_grouping]);
+        }
+        else {
+            return view('bounty.explore', ['bounties' => $bounties, 'grouping' => $this->category_grouping]);
+        }
     }
 
     public function fetchNetworkBounties() {
         $bounties = HeaderBounty::where('category_id', '=', 'NS')->where('is_running', '=', 1)->get();
-        return view('bounty.explore', ['bounties' => $bounties, 'grouping' => $this->category_grouping]);
+        if(Auth::check()) {
+            return view('hunter.explore', ['bounties' => $bounties, 'grouping' => $this->category_grouping]);
+        }
+        else if(Auth::guard('client')->check()) {
+            return view('client.explore', ['bounties' => $bounties, 'grouping' => $this->category_grouping]);
+        }
+        else {
+            return view('bounty.explore', ['bounties' => $bounties, 'grouping' => $this->category_grouping]);
+        }
     }
 
-    public function handleSubmission(Request $request, $cat_id, $pid) {
-        $categorize = Config::get('constants.category');
+    public function getSubmissionRecords() {
+        $hunter_id = Auth::user()->hunter_id;
+        $records = Submission::where('hunter_id', '=', $hunter_id)->get();
+        return view('bounty.activity', ['records' => $records]);
+    }
 
+    public function getReportSubmissionPage($hash) {
+        if(Auth::check()) {
+            $headerbounty = HeaderBounty::where('hash', '=', $hash)->first();
+            return view('bounty.submit', ['program' => $headerbounty]);
+        }
+    }
+
+    public function handleReportSubmission(Request $request, $hash) {
+        $categorize = Config::get('constants.category');
+        
+        $headerbounty = HeaderBounty::where('hash', '=', $hash)->first();
         $title = $request->input('report-title');
-        $category = $cat_id;
+        $category = $headerbounty->category_id;
         $report = $request->file('file-submission');
         $extension = $report->getClientOriginalExtension();
-
-        $submission_date_time = Carbon::now()->toFormattedDateString();
+        $submission_date_time = Carbon::now()->toDateString();
 
         $hunter = Auth::user();
-        $client = Client::find($pid);
 
-        //format: $catInit[] _[date]_[username]_[title]_[company].[extension]
+        $client_id = $headerbounty->client_id;
+        $client = Client::find($client_id);
+        // dd($categorize[$category]);
+
+        // format: $catInit[] _[date]_[username]_[title]_[company].[extension]
         $directory = 'reports/';
-        $filename = sprintf("%s_%s_%s_%s_%s.%s", $categorize[$category], $submission_date_time, $hunter, $title, $client, $extension);
+        $filename = sprintf("%s_%s_%s_%s_%s_[%s].%s", $headerbounty->category_id, $headerbounty->bounty_id, $submission_date_time, $hunter->username, $client->email, $title, $extension);
+        // dd($filename);
         $report->move($directory, $filename);
+
+        $sub = new Submission;
+        $sub->bounty_id = $headerbounty->bounty_id;
+        $sub->hunter_id = $hunter->hunter_id;
+        $sub->title = $title;
+        $sub->description = $request->description;
+        $sub->stored_report_path = $directory .  $filename;
+        $sub->submitted_datetime = $submission_date_time;
+        $sub->is_approved_as_bug = 1; //0: decline, 1: submitted, 2: reviewed, 3: accepted
+        $sub->hash = md5($headerbounty->category_id . "/" . $headerbounty->bounty_id . "/" . $hunter->hunter_id);
+
+        $sub->save();
+        return redirect()->route('hunter.dashboard');
     }
 
-    public function fetchBountyDetail($cat_id, $b_id) {
-        $program = HeaderBounty::where('category_id', '=', $cat_id)->find($b_id);
-
-        return view('bounty.detail', ['program' => $program]);
+    public function fetchBountyDetail($hash) {
+        $program = HeaderBounty::where('hash', '=', $hash)->first();
+        if(Auth::check()) {
+            return view('hunters.bountyDetail', ['program' => $program]);
+        }
+        else if(Auth::guard('client')->check()) {
+            return view('clients.bountyDetail', ['program' => $program]);
+        }
+        else {
+            return view('bounty.bountyDetail', ['program' => $program]);
+        }
     }
 
+    public function showProgramCreatorPage(){
+        $categories = BountyCategory::all();
+        return view('bounty.addProgram', ['categories' => $categories]);
+   }
+
+    public function storeBountyProgram(Request $request){
+        $headerbounty = new HeaderBounty;
+
+        $client = Auth::guard('client')->user();
+
+        $headerbounty->client_id = $client->client_id;
+        $headerbounty->category_id = $request->category_id;
+        $headerbounty->title = $request->title;
+        $headerbounty->scope_description = $request->scope_description;
+        $headerbounty->hash = md5($client->client_id . "/" . $request->category_id);
+
+        $headerbounty->save();
+
+        foreach (explode(', ', $request->test_targets) as $target) {
+            $bountytarget = new BountyTarget;
+            $bountytarget->bounty_id = $headerbounty->bounty_id;
+            $bountytarget->target_string = $target;
+            $bountytarget->save();
+        }
+
+        $request->session()->put('new_bounty_id', $headerbounty->bounty_id);
+        return redirect()->route('client.create.reward');
+    }
+
+    public function showRewardCreatorPage(Request $request) {
+        if($request->session()->has('new_bounty_id')) {
+            return view('bounty.setReward');
+        }
+        else {
+            return redirect()->route('client.dashboard');
+        }
+    }
+
+    public function storeProgramReward(Request $request) {
+        if($request->session()->has('new_bounty_id')) {
+            // dd($request);
+            switch($request->reward_type) {
+                case 1:
+                $client = Auth::guard('client')->user();
+                $validator = Validator::make($request->all(), [
+                    'min_reward' => sprintf('required|integer|min:%d|max:%d', 0, $client->balance),
+                    'max_reward' => sprintf('required|integer|min:%d|max:%d', $request->min_reward, $client->balance),
+                    'password' => 'required',
+                ]);
+                if ($validator->fails()) {
+                    return redirect()->route('client.create.reward')->withErrors($validator);
+                }
+                else if(!Hash::check($request->password, $client->password)) {
+                    return redirect()->route('client.create.reward')->withErrors(['message' => 'Your ID or password is invalid']);
+                }
+                else {
+                    $headerbounty = HeaderBounty::find($request->session()->get('new_bounty_id'));
+                    $headerbounty->minimum_reward = $request->min_reward;
+                    $headerbounty->maximum_reward = $request->max_reward;
+                    $headerbounty->up_since = Carbon::now()->toDateTimeString();
+                    $headerbounty->is_running = 1;
+                    $headerbounty->reward_id = $request->reward_type;
+                    $headerbounty->save();
+                    $request->session()->flash('status', 'New Program Added!');
+                    return redirect()->route('client.dashboard');
+                }
+                break;
+            }
+        }
+        else {
+            return redirect()->route('client.dashboard');
+        }
+    } 
 }

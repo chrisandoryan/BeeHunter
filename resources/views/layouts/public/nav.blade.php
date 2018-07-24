@@ -22,20 +22,41 @@
         <div class="navbar-custom-menu">
           <ul class="nav navbar-nav">
             <li>
-                  <a href="{{ route('login') }}">
-                      <i class="glyphicon glyphicon-user"></i> <span>Sign in</span>
-                     
-                    </a>
+                <a class="btn"  data-toggle="modal" data-target="#modal-login">
+                    <i class="glyphicon glyphicon-user"></i> <span>Sign in</span>
+                </a>
             </li>
             <li>
-                  <a href="{{ route('register') }}">
-                      <i class="glyphicon glyphicon-registration-mark"></i> <span>Register</span>
-                     
-                    </a>
+                <a class="btn" data-toggle="modal" data-target="#modal-register">
+                    <i class="glyphicon glyphicon-registration-mark"></i> <span>Register</span>
+                </a>
             </li>
           </ul>
         </div>
         <!-- /.navbar-custom-menu -->
       </div>
       <!-- /.container-fluid -->
-    </nav>
+     <div class="modal modal-info fade" id="modal-login" style="display: none;">
+         <div class="modal-dialog">
+             <div class="modal-content">
+                 @include('auth.login')
+             </div>
+             <!-- /.modal-content -->
+         </div>
+         <!-- /.modal-dialog -->
+     </div>
+     <div class="modal modal-info fade" id="modal-register" style="display: none;">
+         <div class="modal-dialog">
+             <div class="modal-content">
+                 @include('auth.register')
+             </div>
+             <!-- /.modal-content -->
+         </div>
+         <!-- /.modal-dialog -->
+     </div>
+     <script>
+        $(document).ready(function() {
+            $('.datemask').inputmask('dd/mm/yyyy', { 'placeholder': 'dd/mm/yyyy' });
+        })
+     </script>
+ </nav>

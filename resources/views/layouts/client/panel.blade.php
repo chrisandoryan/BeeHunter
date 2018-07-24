@@ -34,11 +34,7 @@
 <body class="hold-transition skin-black sidebar-mini">
 <div class="wrapper">
   <header class="main-header">
-    @if(\Illuminate\Support\Facades\Auth::guest())
-      @include('layouts.public.nav')
-    @else
       @include('layouts.client.nav')
-    @endif
   </header>
   <!-- Left side column. contains the logo and sidebar -->
   <aside class="main-sidebar">
@@ -49,12 +45,12 @@
       <!-- Sidebar user panel (optional) -->
       <div class="user-panel">
         <div class="pull-left image">
-          <img src="{{ asset(\Illuminate\Support\Facades\Auth::user()->profile_image) }}" class="img-circle" alt="User Image">
+          <img src="{{ asset(\Illuminate\Support\Facades\Auth::guard('client')->user()->image_profile) }}" class="img-circle" alt="User Image">
         </div>
         <div class="pull-left info">
-          <p>{{ \Illuminate\Support\Facades\Auth::user()->username }}</p>
+          <p>{{ \Illuminate\Support\Facades\Auth::guard('client')->user()->name }}</p>
           <!-- Status -->
-          <a href="#">Hack Newborn</a>
+          <a href="#">Stakeholder</a>
         </div>
       </div>
 
@@ -72,11 +68,21 @@
 
       <!-- Sidebar Menu -->
       <ul class="sidebar-menu" data-widget="tree">
-        <li class="header">HackGrid</li>
-            <!-- Optionally, you can add icons to the links -->
-            <li class="{{ Route::currentRouteNamed('dashboard') ? 'active' : '' }}"><a href="{{ route('dashboard') }}"><i class="fa fa-dashboard"></i><span>Dashboard</span></a></li>
-            <li class="{{ Route::currentRouteNamed('profile') ? 'active' : '' }}"><a href="{{ route('profile') }}"><i class="fa fa-user-circle"></i><span>Identity</span></a></li>
-            {{--<li class="{{ Route::currentRouteNamed('leaderboard') ? 'active' : '' }}"><a href="{{ route('leaderboard') }}"><i class="fa fa-cogs"></i><span>Settings</span></a></li>--}}
+          <li class="header">HackGrid</li>
+              <!-- Optionally, you can add icons to the links -->
+              <li class="{{ Route::currentRouteNamed('client.dashboard') ? 'active' : '' }}"><a href="{{ route('client.dashboard') }}"><i class="fa fa-dashboard"></i><span>Dashboard</span></a></li>
+              <li class="treeview">
+              <a><i class="fa fa-bug"></i><span>Programs</span>
+              <span class="pull-right-container">
+                  <i class="fa fa-angle-left pull-right"></i>
+                </span>
+            </a>
+            <ul class="treeview-menu">
+              <li class="{{ Route::currentRouteNamed('client.create.program') ? 'active' : '' }}"><a href="{{ route('client.create.program') }}"><span>Create Program</span></a></li>
+              <li class="{{ Route::currentRouteNamed('client.create.program') ? 'active' : '' }}"><a href="{{ route('client.create.program') }}"><span>Manage Programs</span></a></li>
+            </ul>
+          </li>
+            <li class="{{ Route::currentRouteNamed('client.reports') ? 'active' : '' }}"><a href="{{ route('client.reports') }}"><i class="fa fa-cogs"></i><span>Reports</span></a></li>
             {{--<li class="{{ Route::currentRouteNamed('settings') ? 'active' : '' }}"><a href="{{ route('settings') }}"><i class="fa fa-cogs"></i><span>Settings</span></a></li>--}}
         <li class="header">Explore</li>
         <li class="treeview">
@@ -113,7 +119,7 @@
       Bina Nusantara University
     </div>
     <!-- Default to the left -->
-    <strong>Copyright &copy; 2018 <a href="{{ route('dashboard') }}">BeeHunter Project</a>.</strong> All rights reserved.
+    <strong>Copyright &copy; 2018 <a href="{{ route('client.dashboard') }}">BeeHunter Project</a>.</strong> All rights reserved.
   </footer>
 
   <!-- Control Sidebar -->

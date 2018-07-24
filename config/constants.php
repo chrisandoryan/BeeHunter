@@ -28,13 +28,18 @@ return [
             'category' => [
                 'name' => 'bounty_categories',
                 'primary_key' => 'category_id',
+            ],
+            'reward' => [
+                'name' => 'reward_types',
+                'primary_key' => 'reward_id'
             ]
         ],
     ],
     //2. constant parameter
     'rewards' => [
-        'unpaid' => 0,
         'payment' => 1,
+        'non-payment' => 2,
+        'voluntary' => 3,
     ],
     'verification' => [
         'unverified' => 0,
@@ -50,10 +55,17 @@ return [
             'denied' => 1,
         ],
         'submission' => [
-            'declined' => 0,
-            'pending' => 1,
-            'approved' => 2,
+            0 => 'declined',
+            1 => 'submitted',
+            2 => 'reviewed',
+            3 => 'paid'
         ],
+        'label' => [
+            0 => 'danger',
+            1 => 'warning',
+            2 => 'info',
+            3 => 'success'
+        ]
     ],
     //3. program category
     'category' => [
