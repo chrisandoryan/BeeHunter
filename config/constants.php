@@ -65,6 +65,14 @@ return [
             1 => 'warning',
             2 => 'info',
             3 => 'success'
+        ],
+        'bounty-label' => [
+            0 => 'danger',
+            1 => 'success'
+        ],
+        'bounty-status' => [
+            0 => 'Closed',
+            1 => 'Open'
         ]
     ],
     //3. program category

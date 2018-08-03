@@ -22,7 +22,9 @@ class ClientController extends Controller
 
     public function dashboard() {
          $user = Auth::guard('client')->user();
-         return view('clients.dashboard', ['user' => $user]);
+         $bounties = HeaderBounty::where('client_id', '=', $user->client_id)->get();
+         $bounty_count = HeaderBounty::count();
+         return view('clients.dashboard', ['user' => $user, 'bounties' => $bounties, 'bc' => $bounty_count]);
     }
 
     public function displayReport() {
@@ -33,9 +35,14 @@ class ClientController extends Controller
         return view('clients.report', ['user' => $user, 'reports' => $reports]);
    }
 
-    public function getReportDetail() {
+    public function getReportDetail($subId) {
         //get data dari identifier (base64)
-        return view('clients.detailReport');
+        $report = Submission::select('bounty_id','title','description','submitted_datetime','stored_report_path')->where('submission_id', $subId)->get()->first();
+        // dd($report);
+        $bounty_program = HeaderBounty::select('title')->where('bounty_id', '=', $report->bounty_id)->get()->pluck('title')->toArray();
+        session(['SubId' => $subId, 'BountyId' => $report->bounty_id]);
+
+        return view('clients.detailReport', ['report' => $report, 'bp' => implode($bounty_program)]);
     }
     // public function store(Request $request){
     //     $this->validate($request,[
@@ -67,7 +74,20 @@ class ClientController extends Controller
     // }
 
     public function profile(){
-         return view('clients.profile');
+        return view('clients.profile');
     }
 
+    public function accSub(){
+        $submission = Submission::find(session()->pull('SubId'));
+        $submission->is_approved_as_bug=2;
+        $submission->save();
+        $bounty = HeaderBounty::find(session()->pull('BountyId'));
+        $bounty->is_running=0;
+        $bounty->save();
+        return redirect()->route('client.reports');
+    }
+
+    public function decSub(){
+        return view('clients.profile');
+    }
 }

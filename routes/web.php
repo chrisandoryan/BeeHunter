@@ -53,6 +53,9 @@ Route::get('/', 'BountyController@fetchAllBounties')->name('public.landpage');
             Route::get('/', 'ClientController@displayReport')->name('client.reports');
             Route::get('{identifier}', 'ClientController@getReportDetail');
         });
+        
+        Route::get('acceptSub', 'ClientController@accSub')->name('client.acceptSub');
+        Route::get('declineSub', 'ClientController@decSub')->name('client.declineSub');
  });
 
 // [Bounty Explore]
