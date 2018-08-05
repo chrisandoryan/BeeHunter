@@ -13,6 +13,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use \Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Collection;
 use Hash;
 use Validator;
 
@@ -238,5 +239,24 @@ class BountyController extends Controller
         else {
             return redirect()->route('client.dashboard');
         }
-    } 
+    }
+    
+    public function manageProgram(){
+        $user = Auth::guard('client')->user();
+        $programs = DB::table('header_bounties')
+            ->leftjoin('submissions', 'header_bounties.bounty_id', '=', 'submissions.bounty_id')
+            ->select('header_bounties.bounty_id', 'header_bounties.title', 'deadline', DB::raw('count(submissions.bounty_id) as sub_count'), 'submission_id', 'category_id')
+            ->where('client_id', '=', $user->client_id)
+	        ->groupBy('header_bounties.bounty_id', 'header_bounties.title', 'deadline', 'category_id')
+            ->get();
+        // dd($programs);
+        return view('clients.manage', ['user' => $user, 'programs' => $programs]);
+    }
+
+    public function editProgramPage(Request $request){
+        $user = Auth::guard('client')->user();
+        $program = HeaderBounty::where('bounty_id', $request->input('bounty_id'))->get()->first();
+        $categories = BountyCategory::all();
+        return view('bounty.editProgram', ['user' => $user, 'program' => $program, 'categories' => $categories]);
+    }
 }

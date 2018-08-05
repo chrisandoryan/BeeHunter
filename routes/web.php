@@ -48,6 +48,13 @@ Route::get('/', 'BountyController@fetchAllBounties')->name('public.landpage');
             Route::post('reward', 'BountyController@storeProgramReward')->name('client.store.reward');
         });
         Route::group([
+            'prefix' => 'program/manage',
+        ], function() {
+            Route::get('/', 'BountyController@manageProgram')->name('client.manage.program');
+            Route::post('/edit', 'BountyController@editProgramPage')->name('client.edit.program');
+            Route::post('/editbounty', 'BountyController@storeBountyProgram')->name('client.store.program');
+        });
+        Route::group([
             'prefix' => 'reports',
         ], function() {
             Route::get('/', 'ClientController@displayReport')->name('client.reports');
@@ -56,6 +63,12 @@ Route::get('/', 'BountyController@fetchAllBounties')->name('public.landpage');
         
         Route::get('acceptSub', 'ClientController@accSub')->name('client.acceptSub');
         Route::get('declineSub', 'ClientController@decSub')->name('client.declineSub');
+        Route::group([
+            'prefix' => 'topup',
+         ], function() {
+                Route::get('/', 'ClientController@topup')->name('client.topup');
+                Route::post('/', 'ClientController@storetopup')->name('client.storetopup');
+         });
  });
 
 // [Bounty Explore]

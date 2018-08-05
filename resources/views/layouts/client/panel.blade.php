@@ -68,6 +68,7 @@
 
       <!-- Sidebar Menu -->
       <ul class="sidebar-menu" data-widget="tree">
+          <li class="header"><h4><b><a href="{{ route('client.topup') }}">BeeBalance</a> : Rp. {{ \Illuminate\Support\Facades\Auth::guard('client')->user()->balance }}</b></h4></li>
           <li class="header">HackGrid</li>
               <!-- Optionally, you can add icons to the links -->
               <li class="{{ Route::currentRouteNamed('client.dashboard') ? 'active' : '' }}"><a href="{{ route('client.dashboard') }}"><i class="fa fa-dashboard"></i><span>Dashboard</span></a></li>
@@ -79,7 +80,7 @@
             </a>
             <ul class="treeview-menu">
               <li class="{{ Route::currentRouteNamed('client.create.program') ? 'active' : '' }}"><a href="{{ route('client.create.program') }}"><span>Create Program</span></a></li>
-              <li class="{{ Route::currentRouteNamed('client.create.program') ? 'active' : '' }}"><a href="{{ route('client.create.program') }}"><span>Manage Programs</span></a></li>
+              <li class="{{ Route::currentRouteNamed('client.manage.program') ? 'active' : '' }}"><a href="{{ route('client.manage.program') }}"><span>Manage Programs</span></a></li>
             </ul>
           </li>
             <li class="{{ Route::currentRouteNamed('client.reports') ? 'active' : '' }}"><a href="{{ route('client.reports') }}"><i class="fa fa-cogs"></i><span>Reports</span></a></li>

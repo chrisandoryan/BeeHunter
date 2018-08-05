@@ -17,14 +17,14 @@ class ClientController extends Controller
     }
 
     public function list() {
-         return view('clients.list');
+        return view('clients.list');
     }
 
     public function dashboard() {
-         $user = Auth::guard('client')->user();
-         $bounties = HeaderBounty::where('client_id', '=', $user->client_id)->get();
-         $bounty_count = HeaderBounty::count();
-         return view('clients.dashboard', ['user' => $user, 'bounties' => $bounties, 'bc' => $bounty_count]);
+        $user = Auth::guard('client')->user();
+        $bounties = HeaderBounty::where('client_id', '=', $user->client_id)->get();
+        $bounty_count = HeaderBounty::count();
+        return view('clients.dashboard', ['user' => $user, 'bounties' => $bounties, 'bc' => $bounty_count]);
     }
 
     public function displayReport() {
@@ -89,5 +89,20 @@ class ClientController extends Controller
 
     public function decSub(){
         return view('clients.profile');
+    }
+
+    public function topup(){
+        $user = Auth::guard('client')->user();
+        return view('clients.topup', ['user' => $user]);
+    }
+
+    public function storetopup(Request $request){
+        $user = Auth::guard('client')->user();
+        if($request->input('balance') >= 100000){
+            $balance = $user->balance;
+            $user->balance = $request->input('balance') + $balance;
+            $user->save();
+        }
+        return view('clients.topup', ['user' => $user]);
     }
 }
