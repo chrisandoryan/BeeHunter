@@ -52,7 +52,7 @@ Route::get('/', 'BountyController@fetchAllBounties')->name('public.landpage');
         ], function() {
             Route::get('/', 'BountyController@manageProgram')->name('client.manage.program');
             Route::post('/edit', 'BountyController@editProgramPage')->name('client.edit.program');
-            Route::post('/editbounty', 'BountyController@storeBountyProgram')->name('client.store.program');
+            Route::post('/editbounty', 'BountyController@editBountyProgram')->name('client.edit.bounty.program');
         });
         Route::group([
             'prefix' => 'reports',

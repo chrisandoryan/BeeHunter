@@ -257,6 +257,40 @@ class BountyController extends Controller
         $user = Auth::guard('client')->user();
         $program = HeaderBounty::where('bounty_id', $request->input('bounty_id'))->get()->first();
         $categories = BountyCategory::all();
+        $request->session()->put('new_bounty_id', $program->bounty_id);
         return view('bounty.editProgram', ['user' => $user, 'program' => $program, 'categories' => $categories]);
+    }
+
+    public function editBountyProgram(Request $request){
+        // $validator = Validator::make($request->all(), [
+        //     // 'category_id' => 'required|integer',
+        //     'title' => 'required|string',
+        //     'scope_description' => 'required|string',
+
+        // ]);
+        // if ($validator->fails()) {
+        //     return redirect()->route('client.edit.program')->withErrors($validator);
+        // }
+        $headerbounty = HeaderBounty::find($request->session()->get('new_bounty_id'));
+
+        $client = Auth::guard('client')->user();
+
+        $headerbounty->client_id = $client->client_id;
+        $headerbounty->category_id = $request->category_id;
+        $headerbounty->title = $request->title;
+        $headerbounty->scope_description = $request->scope_description;
+        $headerbounty->hash = md5($client->client_id . "/" . $request->category_id);
+
+        $headerbounty->save();
+        $bountytarget = BountyTarget::select('target_id')->where('bounty_id',$request->session()->get('new_bounty_id'))->get()->pluck('target_id')->toArray();
+        $target = BountyTarget::whereIn('target_id',$bountytarget)->delete();
+        foreach (explode(', ', $request->test_targets) as $target) {
+            $bountytarget = new BountyTarget;
+            $bountytarget->bounty_id = $headerbounty->bounty_id;
+            $bountytarget->target_string = $target;
+            $bountytarget->save();
+        }
+
+        return redirect()->route('client.create.reward');
     }
 }

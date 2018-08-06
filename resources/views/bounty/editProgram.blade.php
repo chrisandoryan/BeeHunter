@@ -10,7 +10,7 @@ Content Header (Page header)
 </section>
 <section class="content container-fluid">
 	{{-- {!! Form::open(['route' => 'BountyController@storeBountyProgram', 'method' => 'POST']) !!} --}}
-    {!! Form::open(['route' => 'client.store.program']) !!}
+    {!! Form::open(['route' => 'client.edit.bounty.program']) !!}
     {{csrf_field()}}
     	<div class="form-group">
     		{{Form::label('title', 'Program Title')}}
@@ -37,18 +37,18 @@ Content Header (Page header)
     		{{Form::label('test_target', 'Testing Target(s) - separate with commas (,)')}}
     		{{Form::text('test_targets','',['class' => 'form-control', 'value' => $program->test_target,'placeholder' => $program->test_target])}}
     	</div>
-        <div class="form-group">
+        {{-- <div class="form-group">
             {{Form::label('source_code', 'Source Codes (optional)')}}
             {{Form::text('source_code','',['class' => 'form-control', 'value' => $program->source_code,'placeholder' => $program->source_code])}}
-        </div>
+        </div> --}}
     	<div class="form-group">
     		{{Form::label('scope_description', 'Scope Description')}}
     		{{Form::textarea('scope_description','',['class' => 'form-control', 'value' => $program->scope_description,'placeholder' => $program->scope_description])}}
     	</div>
-        <div class="form-group">
+        {{-- <div class="form-group">
             {{Form::label('deadline', 'Program Dateline')}}
             {{Form::date('deadline', \Carbon\Carbon::now())}}
-        </div>
+        </div> --}}
         <div class="form-group">
             {{Form::label('disclosure_allowance', 'Diclosure Policy')}}
             <div>
@@ -56,7 +56,7 @@ Content Header (Page header)
                 <p><input type="radio" name="disclosureable" value="0"> No. We'll keep this private, it may be dangerous</p>
             </div>
         </div>
-        <div class="form-group">
+        {{-- <div class="form-group">
             {{Form::label('disclosure_description', 'Disclosure Description')}}
             {{Form::textarea('disclosure_description','',['class' => 'form-control', 'value' => $program->disclosure_description,'placeholder' => $program->disclosure_description])}}
         </div>
@@ -83,7 +83,7 @@ Content Header (Page header)
             {{Form::label('reward_amound', 'Money Reward:')}}
             {{Form::selectRange('reward_amount_range_start', 10, 20)}} -
             {{Form::selectRange('reward_amount_range_end', 10, 20)}}
-        </div>
+        </div> --}}
     	{{Form::submit('Proceed', ['class' => 'btn btn-primary'])}}
 	{!! Form::close() !!}  
     </form>

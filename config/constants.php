@@ -32,6 +32,10 @@ return [
             'reward' => [
                 'name' => 'reward_types',
                 'primary_key' => 'reward_id'
+            ],
+            'target' => [
+                'name' => 'bounty_targets',
+                'primary_key' => 'target_id'
             ]
         ],
     ],
