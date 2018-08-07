@@ -36,7 +36,7 @@
                             @foreach($programs as $program)
                               <tr>
                                 <td>{{ md5($program->bounty_id) }}</td>
-                                <td><a href="{{ url("/explore/programs/{$program->category_id}/{$program->bounty_id}") }}">{{ $program->title }}</a></td>
+                                <td><a href="{{ url("/explore/programs/{$program->hash}") }}">{{ $program->title }}</a></td>
                                 <td>{{ $program->deadline }}</td>
                                 <td>{{ $program->sub_count }}</td>
                                 @if($program->sub_count == 0 )

@@ -245,9 +245,9 @@ class BountyController extends Controller
         $user = Auth::guard('client')->user();
         $programs = DB::table('header_bounties')
             ->leftjoin('submissions', 'header_bounties.bounty_id', '=', 'submissions.bounty_id')
-            ->select('header_bounties.bounty_id', 'header_bounties.title', 'deadline', DB::raw('count(submissions.bounty_id) as sub_count'), 'submission_id', 'category_id')
+            ->select('header_bounties.bounty_id', 'header_bounties.title', 'deadline', DB::raw('count(submissions.bounty_id) as sub_count'), 'submission_id', 'category_id', 'header_bounties.hash')
             ->where('client_id', '=', $user->client_id)
-	        ->groupBy('header_bounties.bounty_id', 'header_bounties.title', 'deadline', 'category_id')
+	        ->groupBy('header_bounties.bounty_id', 'header_bounties.title', 'deadline', 'category_id', 'header_bounties.hash')
             ->get();
         // dd($programs);
         return view('clients.manage', ['user' => $user, 'programs' => $programs]);
