@@ -156,14 +156,16 @@ class BountyController extends Controller
 
     public function fetchBountyDetail($hash) {
         $program = HeaderBounty::where('hash', '=', $hash)->first();
+        $bountytarget = BountyTarget::where('bounty_id', '=', $program->bounty_id)->get();
+        $reward = RewardType::where('reward_id', $program->reward_id)->first();
         if(Auth::check()) {
-            return view('hunters.bountyDetail', ['program' => $program]);
+            return view('hunters.bountyDetail', ['program' => $program, 'bountytarget' => $bountytarget, 'reward' => $reward]);
         }
         else if(Auth::guard('client')->check()) {
-            return view('clients.bountyDetail', ['program' => $program]);
+            return view('clients.bountyDetail', ['program' => $program, 'bountytarget' => $bountytarget, 'reward' => $reward]);
         }
         else {
-            return view('bounty.bountyDetail', ['program' => $program]);
+            return view('bounty.bountyDetail', ['program' => $program, 'bountytarget' => $bountytarget, 'reward' => $reward]);
         }
     }
 

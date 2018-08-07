@@ -57,6 +57,15 @@
                                 {{--my dear friend, so absorbed in the exquisite sense of mere tranquil existence,--}}
                                 {{--that I neglect my talents. I should be incapable of drawing a single stroke--}}
                                 {{--at the present moment; and yet I feel that I never was a greater artist than now.--}}
+                                <b>{{ $reward->reward_string }}</b>
+                                @if($reward->reward_id == 1)
+                                    <h5>Minimum Reward :</h5>
+                                    {{ $program->minimum_reward }}
+                                    <br>
+                                    <h5>Maximum Reward :</h5>
+                                    {{ $program->maximum_reward }}
+                                @endif
+                                <br>
                                 {{ $program->rewards_description }}
                             </p>
                             <h3>Scope</h3>
@@ -72,7 +81,7 @@
                                 {{--at the present moment; and yet I feel that I never was a greater artist than now.--}}
                                 {{ $program->scope_description }}
                             </p>
-                            <h3>Exclusions</h3>
+                            <h3>Test Target</h3>
                             <p>
                                 {{--Exactly like the original bootstrap tabs except you should use
                                 the custom wrapper <code>.nav-tabs-custom</code> to achieve this style.
@@ -83,7 +92,9 @@
                                 my dear friend, so absorbed in the exquisite sense of mere tranquil existence,
                                 that I neglect my talents. I should be incapable of drawing a single stroke
                                 at the present moment; and yet I feel that I never was a greater artist than now.--}}
-                                {{ $program->exclusion_description }}
+                                @foreach($bountytarget as $bt)
+                                {{ $bt->target_string }}
+                                @endforeach
                             </p>
                         </div>
                         <!-- /.tab-pane -->
