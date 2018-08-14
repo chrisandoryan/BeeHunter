@@ -57,12 +57,14 @@ Route::get('/', 'BountyController@fetchAllBounties')->name('public.landpage');
         Route::group([
             'prefix' => 'reports',
         ], function() {
+            Route::post('/', 'ClientController@payReward')->name('client.pay.reward');
             Route::get('/', 'ClientController@displayReport')->name('client.reports');
-            Route::get('{identifier}', 'ClientController@getReportDetail');
+            Route::get('{hash}', 'ClientController@getReportDetail')->name('client.get.reports');
         });
         
         Route::get('acceptSub', 'ClientController@accSub')->name('client.acceptSub');
         Route::get('declineSub', 'ClientController@decSub')->name('client.declineSub');
+        Route::get('reviewedSub', 'ClientController@revSub')->name('client.reviewedSub');
         Route::group([
             'prefix' => 'topup',
          ], function() {

@@ -31,8 +31,8 @@
                 </tr>
                 @foreach($reports as $report)
                 <tr>
-                  <td><a href="{{ url("client/reports/".$report->submission_id)}}">{{ md5($report->submission_id) }}</a></td>
-                  <td><a href="{{ url("/explore/programs/{$report->headerbounties->category_id}/{$report->headerbounties->bounty_id}") }}">{{ $report->headerbounties->title }}</a></td>
+                  <td><a href="{{ url("client/reports/".$report->hash)}}">{{ md5($report->submission_id) }}</a></td>
+                  <td><a href="{{ url("/explore/programs/{$report->headerbounties->hash}") }}">{{ $report->headerbounties->title }}</a></td>
                   <td>{{ $report->submitted_datetime }}</a></td>
                   <td><span class="label label-{{ \Illuminate\Support\Facades\Config::get('constants.status.label')[$report->is_approved_as_bug] }}">{{ \Illuminate\Support\Facades\Config::get('constants.status.submission')[$report->is_approved_as_bug] }}</span></td>
                   <td><a href="{{ $report->stored_report_path }}" class="btn btn-sm btn-default btn-flat pull-right">Download</a></td>

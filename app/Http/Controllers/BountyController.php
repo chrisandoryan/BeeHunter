@@ -213,9 +213,10 @@ class BountyController extends Controller
             switch($request->reward_type) {
                 case 1:
                 $client = Auth::guard('client')->user();
+                $bountyrewardcount = HeaderBounty::where('client_id', $client->client_id)->sum('maximum_reward');
                 $validator = Validator::make($request->all(), [
-                    'min_reward' => sprintf('required|integer|min:%d|max:%d', 0, $client->balance),
-                    'max_reward' => sprintf('required|integer|min:%d|max:%d', $request->min_reward, $client->balance),
+                    'min_reward' => sprintf('required|integer|min:%d|max:%d', 0, $client->balance-$bountyrewardcount),
+                    'max_reward' => sprintf('required|integer|min:%d|max:%d', $request->min_reward, $client->balance-$bountyrewardcount),
                     'password' => 'required',
                 ]);
                 if ($validator->fails()) {
