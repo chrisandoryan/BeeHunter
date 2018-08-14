@@ -10,6 +10,7 @@ use App\BountyCategory;
 use App\HeaderBounty;
 use App\Submission;
 use App\Hunter;
+use Hash;
 use Validator;
 
 class ClientController extends Controller
@@ -127,30 +128,37 @@ class ClientController extends Controller
 
     public function payReward(Request $request){
         if($request->session()->has('SubId') && $request->session()->has('BountyId')) {
-            // dd($request);
             $client = Auth::guard('client')->user();
+            $reward = session()->pull('Reward');
             $validator = Validator::make($request->all(), [
-                'paid_reward' => sprintf('required|integer|min:%d|max:%d', session()->pull('Reward->min_reward'), session()->pull('Reward->max_reward')),
+                'paid_reward' => sprintf('required|integer|min:%d|max:%d', $reward['min_reward'], $reward['max_reward']),
                 'password' => 'required',
             ]);
             if ($validator->fails()) {
-                return redirect()->route('client.pay.reward')->withErrors($validator);
+                return back()->withErrors($validator);
             }
             else if(!Hash::check($request->password, $client->password)) {
-                return redirect()->route('client.pay.reward')->withErrors(['message' => 'Your ID or password is invalid']);
+                return back()->withErrors(['message' => 'Your ID or password is invalid']);
             }
             else {
                 $submission = Submission::find(session()->get('SubId'));
                 $submission->is_rewarded = 1;
                 $submission->is_approved_as_bug = 3;
+                $submission->save();
                 $bounty = HeaderBounty::find(session()->get('BountyId'));
                 $bounty->is_running = 0;
-                if(session()->pull('Reward') != 0){
-                    $hunter = Hunter::find(session()->get('SubId'));
-                    $hunter->balance += $request->input('paid_reward');
-                    $client->balance -= $request->input('paid_reward');
-                    $request->session()->flash('status', 'Payment succeeded!');
-                }
+                $bounty->save();
+                // $hunter = Hunter::find(session()->get('SubId'));
+                // if($hunter->balance){
+                //     $hunter->balance += $request->input('paid_reward');
+                // }else{
+                //     $hunter->update(array('balance' => $request->input('paid_reward')));
+                // }
+                // $hunter->save();
+                $client->balance -= $request->input('paid_reward');
+                $client->save();
+                $request->session()->flash('status', 'Payment succeeded!');
+                
                 return redirect()->route('client.reports');
             }
             
