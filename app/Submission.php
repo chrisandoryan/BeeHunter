@@ -29,4 +29,8 @@ class Submission extends Model
     public function headerbounties() {
         return $this->belongsTo(HeaderBounty::class, 'bounty_id');
     }
+
+    public function submissionStatuses() {
+        return $this->belongsTo(SubmissionStatus::class, 'submission_status');
+    }
 }

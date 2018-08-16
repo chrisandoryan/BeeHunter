@@ -49,5 +49,29 @@ class DatabaseSeeder extends Seeder
             'phone' => '411505',
             'balance' => 5000000,
         ]);
+        DB::table('submission_statuses')->insert([
+            'status' => 'submitted',
+            'note' => 'your submission has been submitted'
+        ]);
+        DB::table('submission_statuses')->insert([
+            'status' => 'on review',
+            'note' => 'your submission is being reviewed'
+        ]);
+        DB::table('submission_statuses')->insert([
+            'status' => 'accepted',
+            'note' => 'congratulations! your submission has been accepted'
+        ]);
+        DB::table('submission_statuses')->insert([
+            'status' => 'declined',
+            'note' => 'sorry, your submission has been declined'
+        ]);
+        DB::table('submission_statuses')->insert([
+            'status' => 'rewarding',
+            'note' => 'your reward is being processed'
+        ]);
+        DB::table('submission_statuses')->insert([
+            'status' => 'completed',
+            'note' => 'report completed'
+        ]);
     }
 }

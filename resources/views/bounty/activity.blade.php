@@ -36,8 +36,8 @@
                   <td>{{ $record->title }}</td>
                   <td><a href="{{ url("/explore/programs/{$record->headerbounties->hash}") }}">{{ $record->headerbounties->title }}</a></td>
                   <td>{{ $record->submitted_datetime }}</a></td>
-                  <td><span class="label label-{{ \Illuminate\Support\Facades\Config::get('constants.status.label')[$record->is_approved_as_bug] }}">{{ \Illuminate\Support\Facades\Config::get('constants.status.submission')[$record->is_approved_as_bug] }}</span></td>
-                  <td>You have submitted a report</td>
+                  <td><span class="label label-{{ \Illuminate\Support\Facades\Config::get('constants.status.label')[$record->submission_status] }}">{{ $record->submissionstatuses->status }}</span></td>
+                  <td>{{ $record->submissionstatuses->note }}</td>
                 </tr>
                 @endforeach
               </tbody></table>

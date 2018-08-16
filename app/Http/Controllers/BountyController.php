@@ -125,7 +125,7 @@ class BountyController extends Controller
         $category = $headerbounty->category_id;
         $report = $request->file('file-submission');
         $extension = $report->getClientOriginalExtension();
-        $submission_date_time = Carbon::now()->toDateString();
+        $submission_date_time = Carbon::now()->toDateTimeString();
 
         $hunter = Auth::user();
 
@@ -135,7 +135,7 @@ class BountyController extends Controller
 
         // format: $catInit[] _[date]_[username]_[title]_[company].[extension]
         $directory = 'reports/';
-        $filename = sprintf("%s_%s_%s_%s_%s_[%s].%s", $headerbounty->category_id, $headerbounty->bounty_id, $submission_date_time, $hunter->username, $client->email, $title, $extension);
+        $filename = sprintf("%s_%s_%s_%s_for_%s_[%s].%s", $headerbounty->category_id, $headerbounty->bounty_id, $submission_date_time, $hunter->username, $client->email, $title, $extension);
         // dd($filename);
         $report->move($directory, $filename);
 
@@ -146,7 +146,7 @@ class BountyController extends Controller
         $sub->description = $request->description;
         $sub->stored_report_path = $directory .  $filename;
         $sub->submitted_datetime = $submission_date_time;
-        $sub->is_approved_as_bug = 1; //0: decline, 1: submitted, 2: reviewed, 3: accepted
+        $sub->submission_status = 1;
         $sub->hash = md5($headerbounty->category_id . "/" . $headerbounty->bounty_id . "/" . $hunter->hunter_id);
 
         $sub->save();
