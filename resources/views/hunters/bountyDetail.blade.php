@@ -97,7 +97,9 @@
                                 that I neglect my talents. I should be incapable of drawing a single stroke
                                 at the present moment; and yet I feel that I never was a greater artist than now.--}}
                                 @foreach($bountytarget as $bt)
-                                {{ $bt->target_string }}
+                                <ul>
+                                <li>{{ $bt->target_string }}</li>
+                                </ul>
                                 @endforeach
                             </p>
                         </div>

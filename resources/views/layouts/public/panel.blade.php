@@ -41,6 +41,7 @@
   <header class="main-header" style="padding:0px;">
    @include('layouts.public.nav')
   </header>
+  <div class="content-wrapper">
   <!-- Full Width Column -->
   @if ($errors->any())
     @foreach ($errors->all() as $error)
@@ -51,7 +52,6 @@
       </div>
     @endforeach
   @endif
-  <div class="content-wrapper">
         @yield('content')
     <!-- /.container -->
   </div>
