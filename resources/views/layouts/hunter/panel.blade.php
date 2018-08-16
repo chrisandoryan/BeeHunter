@@ -72,7 +72,8 @@
             <!-- Optionally, you can add icons to the links -->
             <li class="{{ Route::currentRouteNamed('hunter.dashboard') ? 'active' : '' }}"><a href="{{ route('hunter.dashboard') }}"><i class="fa fa-dashboard"></i><span>Dashboard</span></a></li>
             <li class="{{ Route::currentRouteNamed('hunter.activity') ? 'active' : '' }}"><a href="{{ route('hunter.activity') }}"><i class="fa fa-dashboard"></i><span>Hack Activities</span></a></li>
-            {{--<li class="{{ Route::currentRouteNamed('leaderboard') ? 'active' : '' }}"><a href="{{ route('leaderboard') }}"><i class="fa fa-cogs"></i><span>Settings</span></a></li>--}}
+            <li class="{{ Route::currentRouteNamed('hunter.profile') ? 'active' : '' }}"><a href="{{ route('hunter.profile') }}"><i class="fa fa-dashboard"></i><span>My Profile</span></a></li>
+            {{--<li class="{{ Route::currentRouteNamed('leaderboard') ? 'active' : '' }}"><a href="{{ route('hunter.profile') }}"><i class="fa fa-cogs"></i><span>Settings</span></a></li>--}}
             {{--<li class="{{ Route::currentRouteNamed('settings') ? 'active' : '' }}"><a href="{{ route('settings') }}"><i class="fa fa-cogs"></i><span>Settings</span></a></li>--}}
         <li class="header">Explore</li>
         <li class="treeview">

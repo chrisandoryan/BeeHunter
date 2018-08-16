@@ -17,6 +17,7 @@ class CreatePaymentTransactionsTable extends Migration
             $table->increments('rewardment_id');
             $table->integer('submission_id')->unsigned();
             $table->bigInteger('amount');
+            $table->string('note')->nullable();
             $table->integer('validated')->default(0);
             $table->timestamps();
 
@@ -31,6 +32,6 @@ class CreatePaymentTransactionsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('payment_transactions');
+        Schema::dropIfExists('rewardments');
     }
 }
