@@ -82,7 +82,7 @@
                         <td><a href="{{ url("/hunter/submission/{$record->hash}") }}">{{ $record->hash }}</a></td>
                         <td>{{ $record->title }}</td>
                         <td>{{ $record->headerbounties->title }}</td>
-                        <td><span class="label label-success">Pending for Review</span></td>
+                        <td><span class="label label-success">{{ $record->submissionstatuses->status }}</span></td>
                     </tr>
                     @endforeach
                   </tbody>

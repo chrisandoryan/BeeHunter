@@ -25,6 +25,10 @@ return [
                 'name' => 'submissions',
                 'primary_key' => 'submission_id',
             ],
+            'submissionStatus' => [
+                'name' => 'submission_statuses',
+                'primary_key' => 'status_id'
+            ],
             'category' => [
                 'name' => 'bounty_categories',
                 'primary_key' => 'category_id',
@@ -65,10 +69,12 @@ return [
             3 => 'paid'
         ],
         'label' => [
-            0 => 'danger',
             1 => 'warning',
-            2 => 'info',
-            3 => 'success'
+            2 => 'warning',
+            3 => 'success',
+            4 => 'danger',
+            5 => 'success',
+            6 => 'info'
         ],
         'bounty-label' => [
             0 => 'danger',

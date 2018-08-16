@@ -12,8 +12,8 @@ class HunterController extends Controller
 {
 
     public function profile() {
-       
-        return view('hunters.profile');
+        $user = Auth::user();
+        return view('hunters.profile', ['user' => $user]);
     }
 
     public function mailbox() {

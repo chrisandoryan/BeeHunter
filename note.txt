@@ -1,0 +1,7 @@
+id      name                    note                                                    color
+1       submitted               your submission has been submitted                      info
+2       on review               your submission is being reviewed                       info
+3       accepted                congratulations! your submission has been accepted      success
+4       declined                sorry, your submission has been declined                danger
+5       rewarding               your reward is being processed                          success
+6       completed               report completed                                        warning
