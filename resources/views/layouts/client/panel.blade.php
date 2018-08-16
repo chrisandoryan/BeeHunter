@@ -84,6 +84,7 @@
             </ul>
           </li>
             <li class="{{ Route::currentRouteNamed('client.reports') ? 'active' : '' }}"><a href="{{ route('client.reports') }}"><i class="fa fa-cogs"></i><span>Reports</span></a></li>
+            <li class="{{ Route::currentRouteNamed('hunter.profile') ? 'active' : '' }}"><a href="{{ route('client.profile') }}"><i class="fa fa-dashboard"></i><span>My Profile</span></a></li>
             {{--<li class="{{ Route::currentRouteNamed('settings') ? 'active' : '' }}"><a href="{{ route('settings') }}"><i class="fa fa-cogs"></i><span>Settings</span></a></li>--}}
         <li class="header">Explore</li>
         <li class="treeview">

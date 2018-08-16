@@ -37,6 +37,7 @@ Route::get('/', 'BountyController@fetchAllBounties')->name('public.landpage');
     'prefix' => 'client',
  ], function() {
         Route::get('dashboard', 'ClientController@dashboard')->name('client.dashboard');
+        Route::get('profile', 'ClientController@profile')->name('client.profile');
         Route::get('login', 'Auth\ClientLoginController@showLoginForm')->name('client.login');
         Route::post('login', 'Auth\ClientLoginController@doActionLogin')->name('client.login.submit');
         Route::group([
