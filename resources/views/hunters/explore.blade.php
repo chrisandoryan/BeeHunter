@@ -41,13 +41,13 @@
                                     <div class="row">
                                         <span class="label label-primary">{{ $bounty_detail->bountyCategories->name }}</span>
                                         <span class="label label-success">{{ $bounty_detail->is_running == \Illuminate\Support\Facades\Config::get('constants.status.program.open') ? 'Open' : 'Closed' }}</span>
-                                        <div class="rewards-information">
+                                        {{-- <div class="rewards-information">
                                             @if($bounty_detail->rewardTypes->reward_id == \Illuminate\Support\Facades\Config::get('constants.rewards.payment'))
                                                 <span class="label label-info">up to {{ number_format($bounty_detail->maximum_reward, 0, '', ',') }} IDR</span>
                                             @else
                                                 <span class="label label-info">{{ $bounty_detail->reward_string }}</span>
                                             @endif
-                                        </div>
+                                        </div> --}}
                                     </div>
                                 </div>
                                 <div class="col-sm-4">

@@ -21,7 +21,7 @@ class Hunter extends Authenticatable
 
     public $timestamps = false;
     protected $fillable = [
-        'first_name', 'last_name', 'username', 'email', 'password', 'birthday',
+        'first_name', 'last_name', 'username', 'email', 'password', 'birthday', 'balance',
     ];
 
     public function getRankPosition() {

@@ -13,6 +13,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use \Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Collection;
 use Hash;
 use Validator;
 
@@ -155,14 +156,16 @@ class BountyController extends Controller
 
     public function fetchBountyDetail($hash) {
         $program = HeaderBounty::where('hash', '=', $hash)->first();
+        $bountytarget = BountyTarget::where('bounty_id', '=', $program->bounty_id)->get();
+        $reward = RewardType::where('reward_id', $program->reward_id)->first();
         if(Auth::check()) {
-            return view('hunters.bountyDetail', ['program' => $program]);
+            return view('hunters.bountyDetail', ['program' => $program, 'bountytarget' => $bountytarget, 'reward' => $reward]);
         }
         else if(Auth::guard('client')->check()) {
-            return view('clients.bountyDetail', ['program' => $program]);
+            return view('clients.bountyDetail', ['program' => $program, 'bountytarget' => $bountytarget, 'reward' => $reward]);
         }
         else {
-            return view('bounty.bountyDetail', ['program' => $program]);
+            return view('bounty.bountyDetail', ['program' => $program, 'bountytarget' => $bountytarget, 'reward' => $reward]);
         }
     }
 
@@ -210,9 +213,10 @@ class BountyController extends Controller
             switch($request->reward_type) {
                 case 1:
                 $client = Auth::guard('client')->user();
+                $bountyrewardcount = HeaderBounty::where('client_id', $client->client_id)->sum('maximum_reward');
                 $validator = Validator::make($request->all(), [
-                    'min_reward' => sprintf('required|integer|min:%d|max:%d', 0, $client->balance),
-                    'max_reward' => sprintf('required|integer|min:%d|max:%d', $request->min_reward, $client->balance),
+                    'min_reward' => sprintf('required|integer|min:%d|max:%d', 0, $client->balance-$bountyrewardcount),
+                    'max_reward' => sprintf('required|integer|min:%d|max:%d', $request->min_reward, $client->balance-$bountyrewardcount),
                     'password' => 'required',
                 ]);
                 if ($validator->fails()) {
@@ -238,5 +242,58 @@ class BountyController extends Controller
         else {
             return redirect()->route('client.dashboard');
         }
-    } 
+    }
+    
+    public function manageProgram(){
+        $user = Auth::guard('client')->user();
+        $programs = DB::table('header_bounties')
+            ->leftjoin('submissions', 'header_bounties.bounty_id', '=', 'submissions.bounty_id')
+            ->select('header_bounties.bounty_id', 'header_bounties.title', 'deadline', DB::raw('count(submissions.bounty_id) as sub_count'), 'submission_id', 'category_id', 'header_bounties.hash')
+            ->where('client_id', '=', $user->client_id)
+	        ->groupBy('header_bounties.bounty_id', 'header_bounties.title', 'deadline', 'category_id', 'header_bounties.hash')
+            ->get();
+        // dd($programs);
+        return view('clients.manage', ['user' => $user, 'programs' => $programs]);
+    }
+
+    public function editProgramPage(Request $request){
+        $user = Auth::guard('client')->user();
+        $program = HeaderBounty::where('bounty_id', $request->input('bounty_id'))->get()->first();
+        $categories = BountyCategory::all();
+        $request->session()->put('new_bounty_id', $program->bounty_id);
+        return view('bounty.editProgram', ['user' => $user, 'program' => $program, 'categories' => $categories]);
+    }
+
+    public function editBountyProgram(Request $request){
+        // $validator = Validator::make($request->all(), [
+        //     // 'category_id' => 'required|integer',
+        //     'title' => 'required|string',
+        //     'scope_description' => 'required|string',
+
+        // ]);
+        // if ($validator->fails()) {
+        //     return redirect()->route('client.edit.program')->withErrors($validator);
+        // }
+        $headerbounty = HeaderBounty::find($request->session()->get('new_bounty_id'));
+
+        $client = Auth::guard('client')->user();
+
+        $headerbounty->client_id = $client->client_id;
+        $headerbounty->category_id = $request->category_id;
+        $headerbounty->title = $request->title;
+        $headerbounty->scope_description = $request->scope_description;
+        $headerbounty->hash = md5($client->client_id . "/" . $request->category_id);
+
+        $headerbounty->save();
+        $bountytarget = BountyTarget::select('target_id')->where('bounty_id',$request->session()->get('new_bounty_id'))->get()->pluck('target_id')->toArray();
+        $target = BountyTarget::whereIn('target_id',$bountytarget)->delete();
+        foreach (explode(', ', $request->test_targets) as $target) {
+            $bountytarget = new BountyTarget;
+            $bountytarget->bounty_id = $headerbounty->bounty_id;
+            $bountytarget->target_string = $target;
+            $bountytarget->save();
+        }
+
+        return redirect()->route('client.create.reward');
+    }
 }

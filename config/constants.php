@@ -36,6 +36,10 @@ return [
             'reward' => [
                 'name' => 'reward_types',
                 'primary_key' => 'reward_id'
+            ],
+            'target' => [
+                'name' => 'bounty_targets',
+                'primary_key' => 'target_id'
             ]
         ],
     ],
@@ -71,6 +75,14 @@ return [
             4 => 'danger',
             5 => 'success',
             6 => 'info'
+        ],
+        'bounty-label' => [
+            0 => 'danger',
+            1 => 'success'
+        ],
+        'bounty-status' => [
+            0 => 'Closed',
+            1 => 'Open'
         ]
     ],
     //3. program category

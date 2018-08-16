@@ -9,6 +9,9 @@ use Illuminate\Support\Facades\DB;
 use App\BountyCategory;
 use App\HeaderBounty;
 use App\Submission;
+use App\Hunter;
+use Hash;
+use Validator;
 
 class ClientController extends Controller
 {
@@ -17,12 +20,14 @@ class ClientController extends Controller
     }
 
     public function list() {
-         return view('clients.list');
+        return view('clients.list');
     }
 
     public function dashboard() {
-         $user = Auth::guard('client')->user();
-         return view('clients.dashboard', ['user' => $user]);
+        $user = Auth::guard('client')->user();
+        $bounties = HeaderBounty::where('client_id', '=', $user->client_id)->get();
+        $bounty_count = HeaderBounty::count();
+        return view('clients.dashboard', ['user' => $user, 'bounties' => $bounties, 'bc' => $bounty_count]);
     }
 
     public function displayReport() {
@@ -33,9 +38,21 @@ class ClientController extends Controller
         return view('clients.report', ['user' => $user, 'reports' => $reports]);
    }
 
-    public function getReportDetail() {
+    public function getReportDetail($hash) {
         //get data dari identifier (base64)
-        return view('clients.detailReport');
+        $report = Submission::select('hunter_id','submission_id','bounty_id','title','description','submitted_datetime','stored_report_path','is_approved_as_bug')->where('hash', $hash)->get()->first();
+        $bounty_program = HeaderBounty::select('title', 'is_paid_reward', 'minimum_reward', 'maximum_reward', 'rewards_description')->where('bounty_id', '=', $report->bounty_id)->get()->first();
+        // dd($bounty_program->is_paid_reward);
+        if($bounty_program->is_paid_reward == 1){
+            $reward = array('min_reward' => $bounty_program->minimum_reward, 
+                            'max_reward' => $bounty_program->maximum_reward
+                            );
+        }
+        else{
+            $reward = 0;
+        }
+        session(['HunterId' => $report->hunter_id, 'SubId' => $report->submission_id, 'BountyId' => $report->bounty_id, 'Reward' => $reward]);
+        return view('clients.detailReport', ['report' => $report, 'bounty_program' => $bounty_program, 'hash' => $hash]);
     }
     // public function store(Request $request){
     //     $this->validate($request,[
@@ -67,7 +84,94 @@ class ClientController extends Controller
     // }
 
     public function profile(){
-         return view('clients.profile');
+        $user = Auth::guard('client')->user();
+        $bounties = HeaderBounty::where('client_id', '=', $user->client_id)->get();
+        $bounty_count = HeaderBounty::count();
+        $bounties_solved = $bounties->where('is_running',0)->count();
+        return view('clients.profile', ['user' => $user, 'bounty_count' => $bounty_count, 'bounties_solved' => $bounties_solved]);
     }
 
+    public function accSub(){
+        $submission = Submission::find(session()->pull('SubId'));
+        $submission->is_approved_as_bug=2;
+        $submission->save();
+        $bounty = HeaderBounty::find(session()->pull('BountyId'));
+        $bounty->is_running=0;
+        $bounty->save();
+        return redirect()->route('client.reports');
+    }
+
+    public function revSub(){
+        $submission = Submission::find(session()->pull('SubId'));
+        $submission->is_approved_as_bug=2;
+        $submission->save();
+        $bounty = HeaderBounty::find(session()->pull('BountyId'));
+        $bounty->is_running=0;
+        $bounty->save();
+        return redirect()->route('client.reports');
+    }
+
+    public function decSub(){
+        return view('clients.profile');
+    }
+
+    public function topup(){
+        $user = Auth::guard('client')->user();
+        return view('clients.topup', ['user' => $user]);
+    }
+
+    public function storetopup(Request $request){
+        $user = Auth::guard('client')->user();
+        if($request->input('balance') >= 100000){
+            $balance = $user->balance;
+            $user->balance = $request->input('balance') + $balance;
+            $user->save();
+        }
+        return view('clients.topup', ['user' => $user]);
+    }
+
+    public function payReward(Request $request){
+        if($request->session()->has('SubId') && $request->session()->has('BountyId')) {
+            $client = Auth::guard('client')->user();
+            $reward = session()->pull('Reward');
+            $validator = Validator::make($request->all(), [
+                'paid_reward' => sprintf('required|integer|min:%d|max:%d', $reward['min_reward'], $reward['max_reward']),
+                'password' => 'required',
+            ]);
+            if ($validator->fails()) {
+                return back()->withErrors($validator);
+            }
+            else if(!Hash::check($request->password, $client->password)) {
+                return back()->withErrors(['message' => 'Your ID or password is invalid']);
+            }
+            else {
+                $submission = Submission::find(session()->get('SubId'));
+                $submission->is_rewarded = 1;
+                $submission->is_approved_as_bug = 3;
+                $submission->save();
+
+                $bounty = HeaderBounty::find(session()->pull('BountyId'));
+                $bounty->is_running = 0;
+                $bounty->save();
+                
+                $rewardment = DB::table('rewardments')->insert(
+                    ['submission_id' => session()->pull('SubId'), 'amount' => $request->input('paid_reward')]
+                );
+
+                $hunter = Hunter::find(session()->pull('HunterId'));
+                $hunter->balance += (int)$request->input('paid_reward');
+                $hunter->save();
+
+                $client->balance -= $request->input('paid_reward');
+                $client->save();
+                $request->session()->flash('status', 'Payment succeeded!');
+                
+                return redirect()->route('client.reports');
+            }
+            
+        }
+        else {
+            return redirect()->route('client.dashboard');
+        }
+    }
 }

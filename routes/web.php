@@ -37,6 +37,7 @@ Route::get('/', 'BountyController@fetchAllBounties')->name('public.landpage');
     'prefix' => 'client',
  ], function() {
         Route::get('dashboard', 'ClientController@dashboard')->name('client.dashboard');
+        Route::get('profile', 'ClientController@profile')->name('client.profile');
         Route::get('login', 'Auth\ClientLoginController@showLoginForm')->name('client.login');
         Route::post('login', 'Auth\ClientLoginController@doActionLogin')->name('client.login.submit');
         Route::group([
@@ -48,11 +49,29 @@ Route::get('/', 'BountyController@fetchAllBounties')->name('public.landpage');
             Route::post('reward', 'BountyController@storeProgramReward')->name('client.store.reward');
         });
         Route::group([
+            'prefix' => 'program/manage',
+        ], function() {
+            Route::get('/', 'BountyController@manageProgram')->name('client.manage.program');
+            Route::post('/edit', 'BountyController@editProgramPage')->name('client.edit.program');
+            Route::post('/editbounty', 'BountyController@editBountyProgram')->name('client.edit.bounty.program');
+        });
+        Route::group([
             'prefix' => 'reports',
         ], function() {
+            Route::post('/', 'ClientController@payReward')->name('client.pay.reward');
             Route::get('/', 'ClientController@displayReport')->name('client.reports');
-            Route::get('{identifier}', 'ClientController@getReportDetail');
+            Route::get('{hash}', 'ClientController@getReportDetail')->name('client.get.reports');
         });
+        
+        Route::get('acceptSub', 'ClientController@accSub')->name('client.acceptSub');
+        Route::get('declineSub', 'ClientController@decSub')->name('client.declineSub');
+        Route::get('reviewedSub', 'ClientController@revSub')->name('client.reviewedSub');
+        Route::group([
+            'prefix' => 'topup',
+         ], function() {
+                Route::get('/', 'ClientController@topup')->name('client.topup');
+                Route::post('/', 'ClientController@storetopup')->name('client.storetopup');
+         });
  });
 
 // [Bounty Explore]
