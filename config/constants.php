@@ -16,6 +16,14 @@ return [
             'name' => 'clients',
             'primary_key' => 'client_id',
         ],
+        'rewardment' => [
+            'name' => 'rewardments',
+            'primary_key' => 'rewardment_id',
+        ],
+        'admin' => [
+            'name' => 'admins',
+            'primary_key' => 'id',
+        ],
         'bounty' => [
             'header' => [
                 'name' => 'header_bounties',

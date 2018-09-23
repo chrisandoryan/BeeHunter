@@ -86,6 +86,20 @@ Route::get('/', 'BountyController@fetchAllBounties')->name('public.landpage');
      Route::get('programs/{hash}', 'BountyController@fetchBountyDetail');
  });
 
+ // [Admin Routes]
+ Route::group([
+    'prefix' => 'admin',
+], function() {
+       Route::get('login', 'Auth\AdminLoginController@showLoginForm')->name('admin.login');
+       Route::post('login', 'Auth\AdminLoginController@submitLogin')->name('admin.submit.login');
+       Route::group(['middleware' => ['CheckAdmin']], function () {
+           Route::post('logout', 'Auth\AdminLoginController@logout')->name('admin.logout');
+           Route::get('dashboard', 'AdminController@dashboard')->name('admin.dashboard');
+           Route::post('validate', 'AdminController@RewardValidation')->name('reward.validation');
+    });
+});
+
+
  // [Submission Handling]
  Route::group([
      'prefix' => 'reporting',
