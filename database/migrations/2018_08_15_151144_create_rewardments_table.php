@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreatePaymentTransactionsTable extends Migration
+class CreateRewardmentsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,16 +13,16 @@ class CreatePaymentTransactionsTable extends Migration
      */
     public function up()
     {
-        Schema::create('rewardments', function (Blueprint $table) {
-            $table->increments('rewardment_id');
-            $table->integer('submission_id')->unsigned();
-            $table->bigInteger('amount');
-            $table->string('note')->nullable();
-            $table->integer('validated')->default(0);
-            $table->timestamps();
+        // Schema::create('rewardments', function (Blueprint $table) {
+        //     // $table->increments('rewardment_id');
+        //     // $table->integer('submission_id')->unsigned();
+        //     // $table->bigInteger('amount');
+        //     // $table->string('note')->nullable();
+        //     // $table->integer('validated')->default(0);
+        //     // $table->timestamps();
 
-            $table->foreign('submission_id')->references('submission_id')->on('submissions');
-        });
+        //     // $table->foreign('submission_id')->references('submission_id')->on('submissions');
+        // });
     }
 
     /**
